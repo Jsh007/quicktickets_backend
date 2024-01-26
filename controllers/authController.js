@@ -3,8 +3,8 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-18 12:58:48
  * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-23 15:21:09
- * @FilePath: /mern-crud/controllers/authController.js
+ * @LastEditTime: 2024-01-26 09:01:27
+ * @FilePath: /quicktickets_backend/controllers/authController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
  */
@@ -49,7 +49,7 @@ const login = asyncHandler(async (req, res) => {
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "60s" }
+    { expiresIn: "15m" }
   );
 
   const refreshToken = jwt.sign(
@@ -88,12 +88,12 @@ const refresh = (req, res) => {
     process.env.REFRESH_TOKEN_SECRET,
     asyncHandler(async (err, decodedUser) => {
       if (err) return res.status(403).json({ message: `Forbidden` });
-      console.log(decodedUser);
+      // console.log(decodedUser);
 
       const foundUser = await User.findOne({
         username: decodedUser.username,
       }).exec();
-      console.log(foundUser);
+      // console.log(foundUser);
       if (!foundUser) return res.status(401).json({ message: `Unauthorized` });
       // console.log(decodedUser);
 
@@ -105,7 +105,7 @@ const refresh = (req, res) => {
           },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "60s" }
+        { expiresIn: "15m" }
       );
 
       res.json({ accessToken });

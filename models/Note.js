@@ -3,8 +3,8 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-06 17:26:50
  * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-08 00:24:55
- * @FilePath: /mern-crud/models/Note.js
+ * @LastEditTime: 2024-01-25 14:28:34
+ * @FilePath: /quicktickets_backend/models/Note.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
  */
@@ -15,6 +15,11 @@ const noteSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
+    },
+    username: {
+      type: mongoose.Schema.Types.String,
       required: true,
       ref: "User",
     },

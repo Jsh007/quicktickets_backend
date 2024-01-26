@@ -3,8 +3,8 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-08 00:16:46
  * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-18 14:16:44
- * @FilePath: /mern-crud/controllers/notesController.js
+ * @LastEditTime: 2024-01-25 14:23:02
+ * @FilePath: /quicktickets_backend/controllers/notesController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
  */
@@ -26,17 +26,17 @@ const getAllNotes = asyncHandler(async (req, res) => {
  * @access private
  */
 const createNote = asyncHandler(async (req, res) => {
-  const { user, title, text } = req.body;
-  if (!user || !title || !text) {
+  const { user, username, title, text } = req.body;
+  if ((!user || !username, !title || !text)) {
     return res.status(400).json({ message: "All fields are required" });
   }
   const author = await User.findById(user).lean().exec();
-  const noteObject = { user, title, text };
+  const noteObject = { user, username, title, text };
   const note = await Note.create(noteObject);
 
   if (note) {
     res.status(201).json({
-      message: `New note ${note.ticket} created for ${author.username} !`,
+      message: `New note #${note.ticket} created for ${author.username} !`,
     });
   } else {
     res.status(404).json({ message: "Invalid note data !" });
