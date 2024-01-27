@@ -3,8 +3,8 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-06 19:19:11
  * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-08 00:03:05
- * @FilePath: /mern-crud/controllers/usersController.js
+ * @LastEditTime: 2024-01-26 15:06:28
+ * @FilePath: /quicktickets_backend/controllers/usersController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
  */
@@ -35,19 +35,26 @@ const createUser = asyncHandler(async (req, res) => {
   const { username, password, roles } = req.body;
 
   // confirm user
-  if (!username || !password || !Array.isArray(roles) || !roles.length) {
+  if (!username || !password) {
     return res.status(400).json({ message: "All fields are required !" });
   }
 
   // Check for duplicates
-  const duplicate = await User.findOne({ username }).lean().exec();
+  const duplicate = await User.findOne({ username })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec();
   if (duplicate) {
     return res.status(409).json({ message: "Duplicate Username !" });
   }
 
   // Hash password
   const hashedPwd = await bcrypt.hash(password, 10);
-  const userObject = { username, password: hashedPwd, roles };
+
+  const userObject =
+    !Array.isArray(roles) || !roles.length
+      ? { username, password: hashedPwd }
+      : { username, password: hashedPwd, roles };
 
   // create and store new user
   const newUser = await User.create(userObject);
@@ -84,7 +91,10 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 
   // Check for duplicates
-  const duplicate = await User.findOne({ username }).lean().exec();
+  const duplicate = await User.findOne({ username })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec();
 
   // Allow updates to the orginal user
   if (duplicate && duplicate?._id.toString() !== id) {

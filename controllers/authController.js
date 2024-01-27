@@ -3,7 +3,7 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-18 12:58:48
  * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-26 09:01:27
+ * @LastEditTime: 2024-01-27 10:25:22
  * @FilePath: /quicktickets_backend/controllers/authController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
@@ -45,6 +45,7 @@ const login = asyncHandler(async (req, res) => {
     {
       userInfo: {
         username: foundUser.username,
+        // id: foundUser._id,
         roles: foundUser.roles,
       },
     },
@@ -101,6 +102,7 @@ const refresh = (req, res) => {
         {
           userInfo: {
             username: decodedUser.username,
+            // id: decodedUser._id,
             roles: decodedUser.roles,
           },
         },

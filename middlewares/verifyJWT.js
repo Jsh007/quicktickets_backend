@@ -3,8 +3,8 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-19 12:06:05
  * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-19 14:14:49
- * @FilePath: /mern-crud/middlewares/verifyJWT.js
+ * @LastEditTime: 2024-01-27 10:24:12
+ * @FilePath: /quicktickets_backend/middlewares/verifyJWT.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
  */
@@ -23,6 +23,7 @@ const verifyJWT = (req, res, next) => {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedUser) => {
     if (err) return res.status(403).json({ message: "Forbidden" });
     req.user = decodedUser.username;
+    // req.id = decodedUser._id;
     req.roles = decodedUser.roles;
     next();
   });

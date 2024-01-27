@@ -3,7 +3,7 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-08 00:16:46
  * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-25 14:23:02
+ * @LastEditTime: 2024-01-26 23:56:58
  * @FilePath: /quicktickets_backend/controllers/notesController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
@@ -27,16 +27,26 @@ const getAllNotes = asyncHandler(async (req, res) => {
  */
 const createNote = asyncHandler(async (req, res) => {
   const { user, username, title, text } = req.body;
-  if ((!user || !username, !title || !text)) {
+  if ((!user || !username, !sortid || !title || !text)) {
     return res.status(400).json({ message: "All fields are required" });
   }
-  const author = await User.findById(user).lean().exec();
+  // const author = await User.findById(user).lean().exec();
+
+  // Check for duplicates
+  const duplicate = await Note.findOne({ title })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec();
+  if (duplicate) {
+    return res.status(409).json({ message: "Duplicate note title !" });
+  }
+
+  // Create New Note
   const noteObject = { user, username, title, text };
   const note = await Note.create(noteObject);
-
   if (note) {
     res.status(201).json({
-      message: `New note #${note.ticket} created for ${author.username} !`,
+      message: `New note #${note.ticket} created for ${note.username} !`,
     });
   } else {
     res.status(404).json({ message: "Invalid note data !" });
@@ -49,9 +59,9 @@ const createNote = asyncHandler(async (req, res) => {
  * @access private
  */
 const updateNote = asyncHandler(async (req, res) => {
-  const { id, title, text, completed } = req.body;
+  const { id, username, user, title, text, completed } = req.body;
 
-  if (!id || !title) {
+  if (!id || !title || !username) {
     return res.status(400).json({ message: "All fields are required !" });
   }
 
@@ -60,7 +70,18 @@ const updateNote = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Note not found !" });
   }
 
+  // Check for duplicate note  titles
+  const duplicate = await Note.findOne({ title })
+    .collation({ locale: "en", strength: 2 })
+    .lean()
+    .exec();
+  if (duplicate && duplicate?._id.toString() !== id) {
+    return res.status(409).json({ message: "Duplicate Note title !" });
+  }
+
   note.title = title;
+  note.user = user;
+  note.username = username;
 
   if (text) {
     note.text = text;

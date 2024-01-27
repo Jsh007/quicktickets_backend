@@ -3,8 +3,8 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-04 18:41:44
  * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-07 23:53:16
- * @FilePath: /mern-crud/middlewares/errorHandler.js
+ * @LastEditTime: 2024-01-26 13:55:44
+ * @FilePath: /quicktickets_backend/middlewares/errorHandler.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
  */
@@ -17,7 +17,7 @@ const errorHandler = (err, req, res, next) => {
   console.log(err.stack);
   const statusCode = res.statusCode ? res.statusCode : 500; // Return status code 500 to indicate error a server error
   res.status(statusCode);
-  res.json({ message: err.message });
+  res.json({ message: err.message, isError: true });
 };
 
 module.exports = errorHandler;
