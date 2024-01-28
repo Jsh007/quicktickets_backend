@@ -3,7 +3,7 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-19 12:06:05
  * @LastEditors: Joshua Eigbe jeigbe@gmail.com
- * @LastEditTime: 2024-01-27 22:42:43
+ * @LastEditTime: 2024-01-28 14:43:12
  * @FilePath: /quicktickets_backend/middlewares/verifyJWT.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo

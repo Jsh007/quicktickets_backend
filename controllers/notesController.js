@@ -3,7 +3,7 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-08 00:16:46
  * @LastEditors: Joshua Eigbe jeigbe@gmail.com
- * @LastEditTime: 2024-01-27 23:23:05
+ * @LastEditTime: 2024-01-28 15:07:15
  * @FilePath: /quicktickets_backend/controllers/notesController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
@@ -17,7 +17,15 @@ const getAllNotes = asyncHandler(async (req, res) => {
   if (!notes) {
     res.status(400).json({ message: "No Notes found" });
   }
-  res.json(notes);
+
+  const notesWithUser = await Promise.all(
+    notes.map(async (note) => {
+      const user = await User.findById(note.user).lean().exec();
+      return { ...note, username: user.username };
+    })
+  );
+
+  res.json(notesWithUser);
 });
 
 /**
@@ -26,8 +34,8 @@ const getAllNotes = asyncHandler(async (req, res) => {
  * @access private
  */
 const createNote = asyncHandler(async (req, res) => {
-  const { user, username, title, text } = req.body;
-  if (!user || !title || !username || !text) {
+  const { user, title, text } = req.body;
+  if (!user || !title || !text) {
     return res.status(400).json({ message: "All fields are required" });
   }
   // const author = await User.findById(user).lean().exec();
@@ -42,7 +50,7 @@ const createNote = asyncHandler(async (req, res) => {
   }
 
   // Create New Note
-  const noteObject = { user, username, title, text };
+  const noteObject = { user, title, text };
   const note = await Note.create(noteObject);
   if (note) {
     res.status(201).json({
@@ -60,9 +68,9 @@ const createNote = asyncHandler(async (req, res) => {
  * @access private
  */
 const updateNote = asyncHandler(async (req, res) => {
-  const { id, user, username, title, text, completed } = req.body;
+  const { id, user, title, text, completed } = req.body;
 
-  if (!id || !title || !username) {
+  if (!id || !title) {
     return res.status(400).json({ message: "All fields are required !" });
   }
 
@@ -82,7 +90,6 @@ const updateNote = asyncHandler(async (req, res) => {
 
   note.title = title;
   note.user = user;
-  note.username = username;
 
   if (text) {
     note.text = text;

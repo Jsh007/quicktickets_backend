@@ -2,9 +2,9 @@
  * @Author: Joshua Eigbe self@joshuaeigbe.com
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-18 08:52:38
- * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-18 14:02:57
- * @FilePath: /mern-crud/routes/authRoutes.js
+ * @LastEditors: Joshua Eigbe jeigbe@gmail.com
+ * @LastEditTime: 2024-01-28 22:32:49
+ * @FilePath: /quicktickets_backend/routes/authRoutes.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
  */

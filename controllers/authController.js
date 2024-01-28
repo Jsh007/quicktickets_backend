@@ -3,7 +3,7 @@
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-18 12:58:48
  * @LastEditors: Joshua Eigbe jeigbe@gmail.com
- * @LastEditTime: 2024-01-27 22:39:53
+ * @LastEditTime: 2024-01-28 16:24:07
  * @FilePath: /quicktickets_backend/controllers/authController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
@@ -126,6 +126,7 @@ const refresh = (req, res) => {
 
 const logout = asyncHandler(async (req, res) => {
   const cookies = req.cookies;
+  console.log(cookies);
   if (!cookies?.jwt) return res.sendStatus(204); // No content
   res.clearCookie("jwt", { httpOnly: true, sameSite: "none", secure: true });
   res.json({ message: "Cookie cleared successfully !" });
