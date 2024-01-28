@@ -2,8 +2,8 @@
  * @Author: Joshua Eigbe self@joshuaeigbe.com
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-08 00:16:46
- * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-26 23:56:58
+ * @LastEditors: Joshua Eigbe jeigbe@gmail.com
+ * @LastEditTime: 2024-01-27 23:23:05
  * @FilePath: /quicktickets_backend/controllers/notesController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
@@ -27,7 +27,7 @@ const getAllNotes = asyncHandler(async (req, res) => {
  */
 const createNote = asyncHandler(async (req, res) => {
   const { user, username, title, text } = req.body;
-  if ((!user || !username, !sortid || !title || !text)) {
+  if (!user || !title || !username || !text) {
     return res.status(400).json({ message: "All fields are required" });
   }
   // const author = await User.findById(user).lean().exec();
@@ -46,7 +46,8 @@ const createNote = asyncHandler(async (req, res) => {
   const note = await Note.create(noteObject);
   if (note) {
     res.status(201).json({
-      message: `New note #${note.ticket} created for ${note.username} !`,
+      // message: `New note #${note.ticket} created for ${note.username} !`,
+      message: `New note #${note.ticket} created !`,
     });
   } else {
     res.status(404).json({ message: "Invalid note data !" });
@@ -59,7 +60,7 @@ const createNote = asyncHandler(async (req, res) => {
  * @access private
  */
 const updateNote = asyncHandler(async (req, res) => {
-  const { id, username, user, title, text, completed } = req.body;
+  const { id, user, username, title, text, completed } = req.body;
 
   if (!id || !title || !username) {
     return res.status(400).json({ message: "All fields are required !" });

@@ -2,8 +2,8 @@
  * @Author: Joshua Eigbe self@joshuaeigbe.com
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-18 12:58:48
- * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-27 10:25:22
+ * @LastEditors: Joshua Eigbe jeigbe@gmail.com
+ * @LastEditTime: 2024-01-27 22:39:53
  * @FilePath: /quicktickets_backend/controllers/authController.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
@@ -43,14 +43,14 @@ const login = asyncHandler(async (req, res) => {
 
   const accessToken = jwt.sign(
     {
-      userInfo: {
+      UserInfo: {
         username: foundUser.username,
-        // id: foundUser._id,
+        id: foundUser._id,
         roles: foundUser.roles,
       },
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" }
+    { expiresIn: "60s" }
   );
 
   const refreshToken = jwt.sign(
@@ -99,15 +99,18 @@ const refresh = (req, res) => {
       // console.log(decodedUser);
 
       const accessToken = jwt.sign(
+        // another reason why you kept getting undefined roles in the frontend
+        // decodedUser.roles is undefined because, there is no roles field included during creation of the refresh token
+        // The values assigned to the username, id and roles fields must come from foundUser as fetched from mongoDB
         {
-          userInfo: {
-            username: decodedUser.username,
-            // id: decodedUser._id,
-            roles: decodedUser.roles,
+          UserInfo: {
+            username: foundUser.username,
+            id: foundUser._id,
+            roles: foundUser.roles,
           },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "15m" }
+        { expiresIn: "60s" }
       );
 
       res.json({ accessToken });

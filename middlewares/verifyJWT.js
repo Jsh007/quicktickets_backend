@@ -2,8 +2,8 @@
  * @Author: Joshua Eigbe self@joshuaeigbe.com
  * @Github: https://github.com/jsh007
  * @Date: 2024-01-19 12:06:05
- * @LastEditors: Joshua Eigbe self@joshuaeigbe.com
- * @LastEditTime: 2024-01-27 10:24:12
+ * @LastEditors: Joshua Eigbe jeigbe@gmail.com
+ * @LastEditTime: 2024-01-27 22:42:43
  * @FilePath: /quicktickets_backend/middlewares/verifyJWT.js
  * @copyrightText: Copyright (c) Joshua Eigbe. All Rights Reserved.
  * @Description: See Github repo
@@ -22,9 +22,11 @@ const verifyJWT = (req, res, next) => {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedUser) => {
     if (err) return res.status(403).json({ message: "Forbidden" });
-    req.user = decodedUser.username;
-    // req.id = decodedUser._id;
-    req.roles = decodedUser.roles;
+    // This is the reason why  I keep getting a undefined roles iin the frontend after refresh; req.roles = decodedUser.roles
+    // access token is set with a "UserInfo" object but here that object isn't referenced. Note that decodedUser is not a mongoDB document
+    req.user = decodedUser.UserInfo.username;
+    req.id = decodedUser.UserInfo.id;
+    req.roles = decodedUser.UserInfo.roles;
     next();
   });
 };
